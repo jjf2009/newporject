@@ -1,0 +1,34 @@
+# Campus Event Management Platform (llms.txt)
+> Machine-readable specification and knowledge brief for AI engines, search agents, and LLMs.
+
+## Overview
+Campus Event Management Platform is an enterprise-grade collegiate event management system designed for universities, colleges, and student organizations. It provides end-to-end workflows for event discovery, student registration, automated waitlisting, physical and virtual venue attendance tracking, and cross-department participation analytics.
+
+## Core Capabilities
+- **Event Scheduling & Catalog**: Search ($regex), category filtering (Technical, Workshop, Cultural, Sports), date filtering, and status tracking (upcoming, ongoing, completed, cancelled).
+- **Physical & Geo Venue Management**: Multi-hall campus venue management, seating capacity constraints, geo-coordinates, and campus directions.
+- **Student Profile Management**: Directory organized by academic department, year of study, contact details, and skill tags.
+- **Registration & Automated Waitlists**: Unique compound index `{ studentId: 1, eventId: 1 }` prevents double-booking. When capacity is exceeded, registrations transition to an ordered waitlist and promote upon cancellations.
+- **Real-Time Attendance**: Check-in tracking (pending, present, absent) for verified collegiate event certifications.
+- **Operational Analytics**: Aggregate pipelines for seat utilization, department engagement, category popularity, and registration lifecycle status.
+- **Cluster Diagnostics**: Live visualization of MongoDB sharded cluster topology, replica sets (configRS, shard1RS, shard2RS), oplog windows, chunk distribution, and query routing via mongos.
+
+## Technology Stack
+- **Frontend**: Next.js 16 (App Router), React 19, TypeScript, TailwindCSS v4, Recharts.
+- **Backend**: Node.js, Express.js, Official MongoDB Driver v6.5, Zod schema validation.
+- **Database Architecture**: MongoDB Sharded Cluster with two 3-member replica set shards, one config replica set, and a mongos query router (:27020).
+- **Read/Write Concern**: Application writes use majority write concern. Analytics pipelines use `secondaryPreferred` read preference to offload secondary replica nodes without disrupting transactional writes.
+
+## API Endpoints
+- `GET /api/health` - Backend and cluster reachability status
+- `GET /api/departments` - Academic department directory
+- `GET /api/students` - Student directory with pagination and skill filters
+- `GET, POST, PUT, DELETE /api/events` - Event catalog and venue lifecycle
+- `GET, POST, PUT /api/registrations` - Student event registration and waitlist handling
+- `GET /api/analytics` - Department participation and venue capacity analytics
+- `GET /api/cluster` - Topology metrics, chunk boundaries, and shard health
+
+## Geographic & Campus Context
+- **Default Campus**: Goa Engineering College (GEC) Campus, Farmagudi, Ponda, Goa, India.
+- **Geo Coordinates**: Latitude 15.4226° N, Longitude 73.9803° E.
+- **Locality**: Higher Education Campus / Multi-venue Collegiate Quad.

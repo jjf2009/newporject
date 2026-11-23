@@ -261,7 +261,16 @@ export default function EventsPage() {
                         {evt.category}
                       </span>
                     </td>
-                    <td className="py-3 px-5 text-slate-700">{evt.venue}</td>
+                    <td className="py-3 px-5 text-slate-700">
+                      <div className="flex items-center gap-1.5 font-medium text-slate-900">
+                        <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>{evt.venue}</span>
+                      </div>
+                      <div className="text-[10px] text-slate-400 pl-5">Campus Venue</div>
+                    </td>
                     <td className="py-3 px-5 text-slate-600 font-medium">{formatDate(evt.eventDate)}</td>
                     <td className="py-3 px-5 font-mono text-slate-800">{evt.capacity} seats</td>
                     <td className="py-3 px-5">

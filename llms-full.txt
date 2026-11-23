@@ -1,0 +1,49 @@
+# Campus Event Management Platform (Full Technical Specification)
+
+## System Architecture
+The platform is designed as an enterprise web application for university campus event operations.
+
+```text
+Next.js 16 Web App (:3000)
+        │ REST JSON
+Express.js 4 API (:5000)
+        │ MongoDB Native Driver
+mongos Query Router (:27020)
+   ├── configRS: cfg1 (:27019)
+   ├── shard1RS: s1a (:27018), s1b (:27028), s1c (:27038)
+   └── shard2RS: s2a (:27017), s2b (:27027), s2c (:27037)
+```
+
+## Data Partitioning & Sharding Strategy
+1. **Registrations Collection**:
+   - Shard Key: `{ studentId: 1, eventId: 1 }` (Range-based sharding).
+   - Rationale: High write concurrency during open registration windows. Range-based sharding groups registration transactions predictably across shards.
+   - Unique Constraint: `{ studentId: 1, eventId: 1 }` compound unique index eliminates race condition double registrations at the storage layer.
+2. **Events Collection**:
+   - Shard Key: `{ _id: "hashed" }` (Hashed sharding).
+   - Rationale: Uniform document distribution across shards, preventing hotspots when thousands of students view the same event catalog simultaneously.
+3. **Students & Departments Collections**:
+   - Placement: Unsharded on the primary shard.
+   - Rationale: Moderate-sized reference directories with strict unique constraints and high lookup frequency; eliminates unnecessary distributed cross-shard lookups.
+
+## Operational Workflows
+1. **Capacity Limit & Waitlist Automation**:
+   - An event defines a finite `capacity`.
+   - Registration queries inspect confirmed counts atomically before insertion.
+   - Registrations exceeding capacity are assigned `status: "waitlisted"`.
+   - When a student cancels, the earliest waitlisted participant transitions to `confirmed`.
+2. **Attendance Check-in Verification**:
+   - Event coordinators record attendance (`pending`, `present`, `absent`).
+   - Generates certified participation records for academic credit.
+3. **Analytics Pipeline**:
+   - Utilizes MongoDB Aggregation framework (`$match`, `$lookup`, `$group`, `$facet`, `$project`).
+   - Uses `secondaryPreferred` read preference so heavy analytical queries do not lock or degrade operational write throughput.
+
+## Geographic & Multi-Campus Specifications
+- Campus Location: Main University Quad & Engineering Complex.
+- Regional Coordinates: Latitude 15.4226° N, Longitude 73.9803° E (Ponda, Goa, India).
+- Venue Directory:
+  - Central Computing Lab (Capacity: 12-50, Air Conditioned, High-speed LAN)
+  - Seminar Hall B (Capacity: 25-100, Audio-Visual Projectors)
+  - Main Open Air Amphitheatre (Capacity: 200-1500, Stage Lighting, Multi-tier Seating)
+  - Mechanical Workshop Block (Capacity: 50-120, Heavy Equipment & Robotics Bay)
