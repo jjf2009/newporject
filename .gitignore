@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+frontend/.next/
+frontend/out/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+frontend/.env.local
+frontend/.env.*.local
+
+# Generated files and logs
+*.log
+coverage/
+dist/
+build/
+.DS_Store
+
+# Local MongoDB data
+*.wt
+*.wt.bak
+data/
+

@@ -1,6 +1,15 @@
-# Campus Event Management
+# Campus Event Management Platform
 
-Campus Event Management is a real-world style application for running college events. Organizers can create events, maintain the student directory, accept registrations, manage capacity and waitlists, record attendance, and monitor participation through analytics.
+Campus Event Management Platform is a full-stack college event management system for campus event organizers. It combines event scheduling, student directory management, online event registration, capacity limits, waitlists, attendance tracking, participation analytics, and a resilient MongoDB deployment in one application.
+
+**Keywords:** campus event management, college event registration system, student event platform, event capacity and waitlist management, attendance tracking, MongoDB sharding, MongoDB replication, Next.js, Express.js, TypeScript.
+
+## Project identity
+
+- **Repository name:** `campus-event-management-platform`
+- **Product category:** campus operations and event registration software
+- **Primary users:** college event coordinators, student activity teams, and department administrators
+- **Core outcome:** replace disconnected spreadsheets and forms with one reliable event operations workflow
 
 The project is intentionally presented as a product application. MongoDB is the operational database behind the workflows; there is no separate lab or query runner.
 
