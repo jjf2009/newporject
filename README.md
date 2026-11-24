@@ -50,7 +50,7 @@ To optimize this repository for GitHub search discovery, Google indexing, and AI
 - **Atomic Registration & Auto-Waitlisting**: Unique compound index `{ studentId: 1, eventId: 1 }` prevents double-booking. When capacity is reached, registrations transition to an ordered waitlist and promote upon cancellations.
 - **Verified Attendance Tracking**: Track check-in states (`pending`, `present`, `absent`) for university participation certification.
 - **Real-Time Operations Analytics**: Aggregation pipelines for seat utilization, department engagement, category popularity, and registration lifecycle status.
-- **Cluster Diagnostics**: Live visualization of MongoDB sharded cluster topology, replica sets (`configRS`, `shard1RS`, `shard2RS`), oplog windows, chunk distribution, and query routing via `mongos`.
+- **Resilient MongoDB Deployment**: The API runs through `mongos` with replica-set shards and sharded application collections managed by the infrastructure layer.
 
 ---
 
@@ -86,9 +86,9 @@ Next.js 16 Web Application (:3000)
 Express.js 4 API Gateway (:5000)
         │ Official MongoDB Node.js Driver v6.5
 mongos Query Router (:27020)
-   ├── configRS: cfg1 (:27019)
-   ├── shard1RS: s1a (:27018), s1b (:27028), s1c (:27038)
-   └── shard2RS: s2a (:27017), s2b (:27027), s2c (:27037)
+   ├── configRS: cfg1 (:27030)
+   ├── shard1RS: s1a (:27111), s1b (:27112), s1c (:27113)
+   └── shard2RS: s2a (:27124), s2b (:27122), s2c (:27123)
 ```
 
 > **Security Note:** The client browser never connects directly to MongoDB. All queries pass through the Express API backend, which coordinates with the `mongos` router.
@@ -103,7 +103,6 @@ mongos Query Router (:27020)
 | `events` | Hashed `{ _id: "hashed" }` | Campus event catalogue & venues | `title`, `category`, `venue`, `eventDate`, `capacity`, `status` |
 | `students` | Unsharded (Primary Shard) | Student directory & profiles | `studentId`, `email`, `departmentId`, `year`, `skills` |
 | `departments` | Unsharded (Primary Shard) | Academic departments | `name`, `code`, `coordinator` |
-| `cluster_probes` | Unsharded (Ephemeral) | Infrastructure health checks | `type`, `nonce`, `at` |
 
 - **Duplicate Prevention**: A unique compound index on `{ studentId: 1, eventId: 1 }` prevents concurrent double-registrations.
 - **Aggregation Joins**: The backend aggregates `$lookup` joins on read pipelines without compromising sharded write performance.
@@ -189,7 +188,6 @@ docker exec -it mongos mongosh mongodb://127.0.0.1:27020/campus_events
 - `GET, POST, PUT, DELETE /api/events` - Event catalogue and venue lifecycle
 - `GET, POST, PUT, DELETE /api/registrations` - Student registration and waitlist handling
 - `GET /api/analytics` - Seat utilization, category summaries, and department engagement
-- `GET /api/cluster` - Sharded topology layout, chunk distributions, and replica status
 
 ---
 
@@ -212,11 +210,13 @@ Yes. It includes `llms.txt` and `llms-full.txt` specifications following open AI
 ## 📖 Documentation
 
 - [Detailed Project Report](docs/project-report.md)
+- [Formatted Project Report PDF](docs/campus-event-management-report.pdf)
+- [Editable Project Report DOCX](docs/campus-event-management-report.docx)
 - [Practical Demo Script](docs/practical-demo-script.md)
 - [Presentation Script](docs/project-presentation-script.md)
 - [MongoDB Architecture Concepts](docs/mongodb-concepts.md)
 - [Troubleshooting Guide](docs/troubleshooting.md)
-- [Cluster Infrastructure Documentation](infrastructure/cluster/README.md)
+- [MongoDB Infrastructure Documentation](infrastructure/cluster/README.md)
 - [LLMs Machine Specification (GEO)](./llms.txt)
 - [LLMs Technical Spec (Full)](./llms-full.txt)
 

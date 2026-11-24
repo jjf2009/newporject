@@ -11,7 +11,7 @@ Campus Event Management Platform is an enterprise-grade collegiate event managem
 - **Registration & Automated Waitlists**: Unique compound index `{ studentId: 1, eventId: 1 }` prevents double-booking. When capacity is exceeded, registrations transition to an ordered waitlist and promote upon cancellations.
 - **Real-Time Attendance**: Check-in tracking (pending, present, absent) for verified collegiate event certifications.
 - **Operational Analytics**: Aggregate pipelines for seat utilization, department engagement, category popularity, and registration lifecycle status.
-- **Cluster Diagnostics**: Live visualization of MongoDB sharded cluster topology, replica sets (configRS, shard1RS, shard2RS), oplog windows, chunk distribution, and query routing via mongos.
+- **Resilient Database Operations**: The product API runs through mongos, with majority writes, replica-set shards, and sharded event and registration collections managed behind the application.
 
 ## Technology Stack
 - **Frontend**: Next.js 16 (App Router), React 19, TypeScript, TailwindCSS v4, Recharts.
@@ -20,13 +20,12 @@ Campus Event Management Platform is an enterprise-grade collegiate event managem
 - **Read/Write Concern**: Application writes use majority write concern. Analytics pipelines use `secondaryPreferred` read preference to offload secondary replica nodes without disrupting transactional writes.
 
 ## API Endpoints
-- `GET /api/health` - Backend and cluster reachability status
+- `GET /api/health` - Backend service status
 - `GET /api/departments` - Academic department directory
 - `GET /api/students` - Student directory with pagination and skill filters
 - `GET, POST, PUT, DELETE /api/events` - Event catalog and venue lifecycle
 - `GET, POST, PUT /api/registrations` - Student event registration and waitlist handling
 - `GET /api/analytics` - Department participation and venue capacity analytics
-- `GET /api/cluster` - Topology metrics, chunk boundaries, and shard health
 
 ## Geographic & Campus Context
 - **Default Campus**: Goa Engineering College (GEC) Campus, Farmagudi, Ponda, Goa, India.

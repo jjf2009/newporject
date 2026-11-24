@@ -6,7 +6,7 @@ This Compose stack is the database deployment used by Campus Event Management. I
 
 - cfg1: config server replica-set member, host port 27030.
 - s1a, s1b, s1c: three members of shard1RS, host ports 27111–27113.
-- s2a, s2b, s2c: three members of shard2RS, host ports 27121–27123.
+- s2a, s2b, s2c: three members of shard2RS, host ports 27124, 27122, and 27123.
 - mongos: application router, host port 27020.
 - cluster-init: one-shot initialization job.
 
@@ -44,11 +44,11 @@ The backend connects only to this router.
 
 ## Failover demonstration
 
-Open the Cluster page and identify a current primary. Stop only that container:
+For an infrastructure failover test, identify a current primary with mongosh or Docker logs, then stop only that container:
 
     docker stop <primary-container>
 
-Refresh the Cluster page and wait for a new election. The application continues to use mongos. Restart the stopped member afterward:
+Wait for a new election. The application continues to use mongos. Restart the stopped member afterward:
 
     docker start <stopped-container>
 

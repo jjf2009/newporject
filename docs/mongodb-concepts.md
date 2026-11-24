@@ -10,7 +10,7 @@ The application uses ObjectId for document identity and relationships. Dates are
 
 ## Collections
 
-The database contains departments, students, events, registrations, and cluster_probes.
+The database contains departments, students, events, and registrations.
 
 Collections are separated by business responsibility. This makes event, student, and registration APIs easy to reason about and lets indexes match the queries used by each screen.
 
@@ -58,7 +58,7 @@ The frontend does not recalculate these values. It displays the API results with
 
 A replica set maintains multiple copies of data. One member is primary and accepts writes. Secondary members replay operations from the oplog.
 
-This project has three members in each data shard. Application writes use majority write concern. The Cluster page shows member states and oplog windows and can run a controlled marker probe through mongos.
+This project has three members in each data shard. Application writes use majority write concern. Replica-set state is managed by the Docker infrastructure, while the product API continues to connect through mongos.
 
 ## Sharding
 

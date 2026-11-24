@@ -19,7 +19,7 @@ A normal workflow is:
 5. Automatically confirm the registration while seats are available, or place it on the waitlist when capacity is full.
 6. Update attendance after the event.
 7. Use Analytics to understand demand, utilization, department participation, and registration status.
-8. Use Cluster only when an operator needs infrastructure health evidence.
+8. Use Analytics to review participation and capacity trends.
 
 ## 3. Application architecture
 
@@ -32,7 +32,6 @@ The frontend is a Next.js App Router application written in TypeScript and style
 - Students
 - Registrations
 - Analytics
-- Cluster
 
 The frontend calls the Express API through frontend/lib/api.ts. It never connects to MongoDB directly and never sends arbitrary MongoDB filters or commands.
 
@@ -46,7 +45,7 @@ The backend is an Express application using the official MongoDB Node.js driver.
 - Return consistent JSON responses.
 - Join registration records with student and event data for readable screens.
 - Send analytics aggregation pipelines to MongoDB.
-- Expose operational cluster evidence through read-only endpoints and one controlled replication probe.
+- Run on a resilient MongoDB deployment without exposing database administration screens to end users.
 
 ### Database
 
@@ -75,10 +74,6 @@ Indexes support the common event-list operations: status/date sorting and catego
 Stores the relationship between one student and one event. It also stores registration status, attendance status, notes, and registration time.
 
 The compound unique index on studentId plus eventId is both a business rule and the range shard-key index. It prevents duplicate student-event registrations.
-
-### Cluster probes
-
-cluster_probes is an operational collection used only by the Cluster page. A temporary marker is written with majority write concern and read directly from each shard member to verify that replication is functioning. Old markers are cleaned before a new probe. It is infrastructure telemetry, not product domain data.
 
 ## 5. Business rules
 
@@ -133,13 +128,7 @@ The application uses two data shards behind mongos:
 
 students and departments remain unsharded on the primary shard because their unique identity indexes are important to the product and do not need horizontal partitioning at this scale.
 
-## 7. Cluster page
-
-The Cluster page is an operational view, not a lab. It reads replica-set member health and state, current primaries, uptime, optime dates, election data, oplog windows, live replication probe results, shard names, shard keys, chunks, per-shard distribution, and query planner summaries for representative application queries.
-
-If the cluster is unavailable, the page shows a clear failure state and startup instructions. It never fabricates healthy status.
-
-## 8. Deployment layout
+## 7. Deployment layout
 
 | Service | Port | Responsibility |
 |---|---:|---|
@@ -148,11 +137,11 @@ If the cluster is unavailable, the page shows a clear failure state and startup 
 | mongos | 27020 | Application database router |
 | cfg1 | 27030 | Config server replica-set member |
 | s1a/s1b/s1c | 27111–27113 | Three members of shard1RS |
-| s2a/s2b/s2c | 27121–27123 | Three members of shard2RS |
+| s2a/s2b/s2c | 27124, 27122, 27123 | Three members of shard2RS |
 
 All published ports bind to 127.0.0.1. The Docker network uses container DNS names for replica-set membership.
 
-## 9. Seed data
+## 8. Seed data
 
 npm run seed idempotently creates the base departments, students, events, and registrations.
 
@@ -160,14 +149,14 @@ npm run seed:volume adds larger tagged data for realistic analytics and sharding
 
 The seed does not reset the entire database and does not create unrelated scratch data.
 
-## 10. Limitations and future production work
+## 9. Limitations and future production work
 
 - The local config server has one member to reduce resource use; production should use three.
 - Capacity assignment is count-then-insert and can race under heavy concurrent registration.
 - Authentication, authorization, notifications, payments, and cloud deployment are not part of this version.
 - The local cluster is intended for demonstration and development, not production operations.
 
-## 11. Demo outcome
+## 10. Demo outcome
 
-The strongest demonstration is a complete business flow: create an event, register students, show a waitlisted registration when capacity is reached, update attendance, open Analytics, and finish on Cluster to show how the same application is served by a resilient sharded MongoDB deployment.
+The strongest demonstration is a complete business flow: create an event, register students, show a waitlisted registration when capacity is reached, update attendance, and open Analytics to review the resulting participation data. The underlying resilient MongoDB deployment remains transparent to the end user.
 

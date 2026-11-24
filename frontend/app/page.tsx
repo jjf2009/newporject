@@ -199,10 +199,10 @@ export default function DashboardPage() {
 
           <div className="mt-6 pt-4 border-t border-slate-800">
             <Link
-              href="/cluster"
+              href="/analytics"
               className="w-full py-2 bg-emerald-500 text-slate-950 font-bold rounded-lg text-xs text-center block hover:bg-emerald-400 transition"
             >
-              View System Health
+              View Participation Analytics
             </Link>
           </div>
         </div>

@@ -57,7 +57,7 @@ services:
     image: mongodb/mongodb-community-server:latest
     container_name: s2a
     command: ["mongod", "--shardsvr", "--replSet", "shard2RS", "--bind_ip_all", "--port", "27017"]
-    ports: ["127.0.0.1:27121:27017"]
+    ports: ["127.0.0.1:27124:27017"]
     volumes: ["campus_cluster_s2a_data:/data/db"]
     networks: [campus-cluster-net]
     healthcheck:

@@ -1,7 +1,7 @@
-const { getDB } = require("../config/db");
+const { getAnalyticsDB } = require("../config/db");
 
 async function getOverview() {
-  const db = getDB().withReadPreference("secondaryPreferred");
+  const db = getAnalyticsDB();
 
   const [
     studentCount,
@@ -63,7 +63,7 @@ async function getOverview() {
 }
 
 async function getRegistrationsByEvent() {
-  const db = getDB().withReadPreference("secondaryPreferred");
+  const db = getAnalyticsDB();
 
   // Aggregate: count registrations per event with $match, $group, $lookup, $project, $sort
   const pipeline = [
@@ -120,7 +120,7 @@ async function getRegistrationsByEvent() {
 }
 
 async function getRegistrationsByDepartment() {
-  const db = getDB().withReadPreference("secondaryPreferred");
+  const db = getAnalyticsDB();
 
   const pipeline = [
     {
@@ -155,7 +155,7 @@ async function getRegistrationsByDepartment() {
 }
 
 async function getEventCategorySummary() {
-  const db = getDB().withReadPreference("secondaryPreferred");
+  const db = getAnalyticsDB();
 
   const pipeline = [
     {
@@ -184,7 +184,7 @@ async function getEventCategorySummary() {
 }
 
 async function getRecentRegistrations(limit = 10) {
-  const db = getDB().withReadPreference("secondaryPreferred");
+  const db = getAnalyticsDB();
   const safeLimit = Math.min(100, Math.max(1, Number(limit) || 10));
 
   const pipeline = [
@@ -229,12 +229,12 @@ async function getRecentRegistrations(limit = 10) {
 }
 
 async function getStatusDistribution() {
-  const db = getDB().withReadPreference("secondaryPreferred");
+  const db = getAnalyticsDB();
   return db.collection("registrations").aggregate([{ $group: { _id: "$status", count: { $sum: 1 } } }, { $sort: { count: -1 } }]).toArray();
 }
 
 async function getCapacityStats() {
-  const db = getDB().withReadPreference("secondaryPreferred");
+  const db = getAnalyticsDB();
   return db.collection("events").aggregate([{ $group: { _id: null, averageCapacity: { $avg: "$capacity" }, minCapacity: { $min: "$capacity" }, maxCapacity: { $max: "$capacity" }, totalCapacity: { $sum: "$capacity" } } }]).next();
 }
 

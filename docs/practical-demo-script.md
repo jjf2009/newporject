@@ -120,65 +120,17 @@ Mention:
 
 “Analytics are allowed to read from secondaries with secondaryPreferred, so a report may lag by a small amount. Normal event and registration screens use primary reads so recent changes are immediately visible.”
 
-## 8. Show the operational cluster — 3 minutes
-
-Open Cluster.
-
-Point out:
-
-- configRS, shard1RS, and shard2RS.
-- Primary and secondary states.
-- Oplog window.
-- Replication probe.
-- Shard names.
-- Shard keys.
-- Chunk counts and distribution.
-- Explain-query buttons.
+## 8. Explain the production database layer — 1 minute
 
 Say:
 
-“The application connects to mongos, not directly to a database member. Every data shard is a replica set. Replication protects availability by keeping copies and enabling elections. Sharding distributes data and workload across shards.”
+“The product API connects to mongos, which routes requests to the sharded MongoDB cluster. Each data shard is a replica set, so data remains available if one member fails. The application uses majority writes, while analytics use secondaryPreferred to spread reporting reads. Users do not need to see database administration screens; these details support the product behind the scenes.”
 
-Run the replication probe.
+If you want to demonstrate failover, do it from a separate terminal by stopping a known primary container and restarting it afterward. Never run docker compose down -v during a live presentation.
 
-Say:
-
-“The backend writes a temporary operational marker with majority write concern through mongos, then reads it directly from each shard member. The page reports whether every member can see the replicated marker and the read latency.”
-
-Show the shard keys:
-
-- registrations uses the compound range key studentId plus eventId.
-- events uses a hashed _id key.
+## 9. Close — 45 seconds
 
 Say:
 
-“The registration key supports student-oriented access and is also the unique registration index. Events use hashing to spread event documents more evenly.”
-
-## 9. Optional failover demonstration — 2 minutes
-
-Only do this if time and resources allow.
-
-From a separate terminal, stop the current primary container shown on the Cluster page:
-
-    docker stop <primary-container>
-
-Refresh Cluster and wait for a new primary election.
-
-Say:
-
-“The failed primary is reported as down. The remaining replica-set members elect a new primary. The application continues to use mongos, so the frontend does not need a new database URL.”
-
-Restart the stopped container:
-
-    docker start <stopped-container>
-
-Wait for it to rejoin as a secondary.
-
-Never run docker compose down -v during a live presentation.
-
-## 10. Close — 45 seconds
-
-Say:
-
-“This project is a complete event operations application backed by MongoDB. The domain workflows are real: event capacity, duplicate prevention, waitlists, attendance, joined registration views, and analytics. Replication and sharding are part of the same database stack that serves the application, so the infrastructure demonstration is connected to the product rather than being a separate lab.”
+“This project is a complete event operations application backed by MongoDB. The domain workflows are real: event capacity, duplicate prevention, waitlists, attendance, joined registration views, and analytics. Replication and sharding support the same product database behind the scenes.”
 

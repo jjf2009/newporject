@@ -44,19 +44,13 @@
 
 “Analytics use secondaryPreferred because a small amount of replication lag is acceptable for reports. CRUD screens use the primary read preference so recent changes appear immediately.”
 
-## Cluster architecture
+## Database deployment
 
 “The application connects to one local sharded cluster through mongos. The cluster has a config server replica set, shard1RS with three members, and shard2RS with three members.”
 
 “Each data shard is a replica set. The primary receives writes and secondaries maintain copies using the oplog. Majority write concern makes successful writes durable across a replica-set majority. If a primary fails, the remaining members can elect a new primary.”
 
 “Sharding distributes the data across multiple shards. Registrations use the range key studentId plus eventId. Events use a hashed _id key for even distribution. Students and departments stay on the primary shard because their unique identity indexes are more important than distributing these smaller collections.”
-
-## Cluster page
-
-“The Cluster page is an operational health view. It shows member states, primaries, oplog windows, shard names, shard keys, chunk counts, distribution, and query planner summaries.”
-
-“The replication probe writes a short-lived operational marker through mongos with majority write concern, then reads it directly from each shard member. This gives visible evidence that the same application cluster is replicating data.”
 
 ## Limitations
 
@@ -66,5 +60,5 @@
 
 ## Closing
 
-“To conclude, Campus Event Management is a product-oriented application rather than a collection of database exercises. MongoDB supports the actual domain model, business rules, joined screens, analytics, availability, and horizontal distribution. The final demo shows one continuous workflow from event creation to registration, attendance, reporting, and cluster health.”
+“To conclude, Campus Event Management is a product-oriented application. MongoDB supports the actual domain model, business rules, joined screens, analytics, availability, and horizontal distribution. The final demo shows one continuous workflow from event creation to registration, attendance, and reporting.”
 

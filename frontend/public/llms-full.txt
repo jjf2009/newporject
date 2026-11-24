@@ -9,9 +9,9 @@ Next.js 16 Web App (:3000)
 Express.js 4 API (:5000)
         │ MongoDB Native Driver
 mongos Query Router (:27020)
-   ├── configRS: cfg1 (:27019)
-   ├── shard1RS: s1a (:27018), s1b (:27028), s1c (:27038)
-   └── shard2RS: s2a (:27017), s2b (:27027), s2c (:27037)
+   ├── configRS: cfg1 (:27030)
+   ├── shard1RS: s1a (:27111), s1b (:27112), s1c (:27113)
+   └── shard2RS: s2a (:27124), s2b (:27122), s2c (:27123)
 ```
 
 ## Data Partitioning & Sharding Strategy

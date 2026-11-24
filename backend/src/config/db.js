@@ -1,4 +1,4 @@
-const { MongoClient } = require("mongodb");
+const { MongoClient, ReadPreference } = require("mongodb");
 
 let client = null;
 let database = null;
@@ -40,6 +40,15 @@ function getClient() {
   return client;
 }
 
+function getAnalyticsDB() {
+  if (!database || !client) {
+    throw new Error("MongoDB has not been initialized. Call connectDB() first.");
+  }
+  return client.db(database.databaseName, {
+    readPreference: new ReadPreference("secondaryPreferred"),
+  });
+}
+
 async function createIndexes(db) {
   // Students indexes
   await db.collection("students").createIndex({ studentId: 1 }, { unique: true });
@@ -76,4 +85,4 @@ async function closeDB() {
   }
 }
 
-module.exports = { connectDB, getDB, getClient, closeDB };
+module.exports = { connectDB, getDB, getClient, getAnalyticsDB, closeDB };

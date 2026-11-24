@@ -49,7 +49,7 @@ It should print CLUSTER READY. If a member is unhealthy, inspect that member:
     docker logs s2b
     docker logs s2c
 
-The cluster requires host ports 27020, 27030, 27111–27113, and 27121–27123. Check for conflicts before starting it:
+The cluster requires host ports 27020, 27030, 27111–27113, 27122–27124. Check for conflicts before starting it:
 
     ss -ltnp
 

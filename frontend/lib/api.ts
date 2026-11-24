@@ -168,30 +168,3 @@ export async function getRecentRegistrations(limit = 10) {
   return apiRequest<ApiResponse<Registration[]>>(`/analytics/recent-registrations?limit=${limit}`);
 }
 
-export async function getClusterReplication() {
-  return apiRequest<ApiResponse<{
-    majority: boolean;
-    sets: { name: string; primary: string | null; members: { node: string; state: string; health: number; uptime?: number; optimeDate?: string }[]; oplog?: { firstDate?: string; lastDate?: string } | null }[];
-  }>>("/cluster/replication");
-}
-
-export async function probeClusterReplication() {
-  return apiRequest<ApiResponse<{ nonce: string; writeElapsedMs: number; members: { node: string; found: boolean; elapsedMs: number | null }[] }>>(
-    "/cluster/replication/probe",
-    { method: "POST" }
-  );
-}
-
-export async function getClusterSharding() {
-  return apiRequest<ApiResponse<{
-    routedThrough: string;
-    shards: { _id: string; host: string }[];
-    collections: { name: string; key: Record<string, unknown>; unique?: boolean; chunks: number; distribution: unknown[] }[];
-  }>>("/cluster/sharding");
-}
-
-export async function explainClusterQuery(id: string) {
-  return apiRequest<ApiResponse<{ id: string; collection: string; filter: Record<string, unknown>; summary: { winningStage: string; stages: string[]; shards: string[] } }>>(
-    `/cluster/sharding/explain/${id}`
-  );
-}

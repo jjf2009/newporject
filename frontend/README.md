@@ -9,7 +9,6 @@ This is the Next.js frontend for the Campus Event Management product.
 - Students: student directory and profile management.
 - Registrations: registration status, waitlists, joined event/student details, and attendance.
 - Analytics: participation and capacity reports.
-- Cluster: live MongoDB deployment health and routing evidence.
 
 ## Run
 
@@ -22,5 +21,5 @@ Open http://localhost:3000.
 
 The frontend calls the backend at http://127.0.0.1:5000/api by default. Set NEXT_PUBLIC_API_BASE_URL only when the API is hosted elsewhere.
 
-The browser never connects directly to MongoDB.
+The browser never connects directly to MongoDB. Replication and sharding are infrastructure concerns managed by Docker and mongos, not separate user-facing pages.
 

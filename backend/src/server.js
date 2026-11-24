@@ -8,7 +8,6 @@ const eventRoutes = require("./routes/events");
 const studentRoutes = require("./routes/students");
 const registrationRoutes = require("./routes/registrations");
 const analyticsRoutes = require("./routes/analytics");
-const clusterRoutes = require("./routes/cluster");
 const departmentRoutes = require("./routes/departments");
 
 const app = express();
@@ -50,7 +49,6 @@ app.use("/api/events", eventRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/registrations", registrationRoutes);
 app.use("/api/analytics", analyticsRoutes);
-app.use("/api/cluster", clusterRoutes);
 app.use("/api/departments", departmentRoutes);
 
 // 404 handler
